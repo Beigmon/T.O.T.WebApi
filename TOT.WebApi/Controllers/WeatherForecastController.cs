@@ -1,33 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
+using TOT.DTO;
+using TOT.Services.Caching.Interfaces;
 
 namespace TOT.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    //[Authorize]
+    [Route("api/[controller]")]
+    //[EnableRateLimiting("fixed")]
+    public class WeatherForecastController(
+        ILogger<WeatherForecastController> logger,
+        TotContext dbContext)
+        : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
+        [HttpGet("Setup/{value}")]
+        public async Task Set(string value, [FromServices] ICachingService cachingService, CancellationToken token)
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
+            await cachingService.SetAsync("test", value, token);
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("Choppe/{key}")]
+        public async Task<ActionResult<string>> Get(string key, [FromServices] ICachingService cachingService, CancellationToken token)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var value = await cachingService.GetAsync<string>(key, token);
+            return new ActionResult<string>(value);
         }
     }
 }
