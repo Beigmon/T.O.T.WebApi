@@ -1,17 +1,18 @@
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using TOT.DTO;
 using TOT.Services.Caching;
 using TOT.Services.Caching.Interfaces;
+using TOT.Services.ControllerServices;
+using TOT.Services.ControllerServices.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<TotContext>(options => options.UseNpgsql(builder.Configuration["CONNECTION_STRING"]));
 JsonSerializerOptions options = new()
 {
     ReferenceHandler = ReferenceHandler.IgnoreCycles,
@@ -28,7 +29,10 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 // Register services
+builder.Services.AddDbContext<TotContext>(options => options.UseNpgsql(builder.Configuration["CONNECTION_STRING"]));
 builder.Services.AddTransient<ICachingService, CachingService>();
+builder.Services.AddTransient<IPlayerService, PlayerService>();
+builder.Services.AddTransient<IStationService, StationService>();
 
 // Security
 builder.Services.AddRateLimiter(option =>
@@ -48,7 +52,7 @@ builder.Services.AddAuthentication(x =>
     {
         x.RequireHttpsMetadata = true;
         x.SaveToken = true;
-        byte[] key = Encoding.UTF8.GetBytes("SECRET SECRET SECRET SECRET SECRET SECRET");
+        var key = Encoding.UTF8.GetBytes("SECRET SECRET SECRET SECRET SECRET SECRET");
         x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,

@@ -23,7 +23,7 @@ namespace TOT.DTO.Extensions
             {
                 Character = character,
                 Player = player,
-                Occurrence = 1
+                Occurrence = 0
             };
 
             var tracking = await dbContext.AddAsync(playerCharacter);

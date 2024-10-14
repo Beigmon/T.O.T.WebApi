@@ -4,6 +4,6 @@
     {
         public Task<T?> GetAsync<T>(string key, CancellationToken token);
 
-        public Task SetAsync(string key, object value, CancellationToken token);
+        public Task SetAsync(string key, object value, int durationInHours, CancellationToken token);
     }
 }

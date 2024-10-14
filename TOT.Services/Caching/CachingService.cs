@@ -21,12 +21,17 @@ namespace TOT.Services.Caching
             }
         }
 
-        public async Task SetAsync(string key, object value, CancellationToken token)
+        public async Task SetAsync(string key, object value, int durationInHours, CancellationToken token)
         {
             try
             {
                 var content = JsonConvert.SerializeObject(value);
-                await distributedCache.SetStringAsync(key, content, token);
+                var options = new DistributedCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromHours(durationInHours)
+                };
+
+                await distributedCache.SetStringAsync(key, content, options, token);
             }
             catch (Exception)
             {
