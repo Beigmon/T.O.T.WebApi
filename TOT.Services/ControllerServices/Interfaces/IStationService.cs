@@ -6,7 +6,7 @@ namespace TOT.Services.ControllerServices.Interfaces
     {
         public Task<List<Station>?> GetAllStationsAsync(int tournamentId, CancellationToken token);
 
-        public Task<List<Station>?> SetStationForASetAsync(int tournamentId, string setId, int stationId,
-            CancellationToken token);
+        public Task<List<Station>?> SetStationForASetAsync(int tournamentId, Station station, CancellationToken token);
+        public Task<List<Station>?> RemoveStationForASetAsync(int tournamentId, string setId, CancellationToken token);
     }
 }

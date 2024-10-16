@@ -21,7 +21,7 @@ namespace TOT.WebApi.Controllers
         }
 
         [HttpPut("Characters/{userStartggId}:{userGamerTag}")]
-        public async Task<ActionResult<Player>> UpdateCharacterAsync(int userStartggId, string userGamerTag, List<Character> character,
+        public async Task<ActionResult<Player>> UpdateCharacterAsync(int userStartggId, string userGamerTag, [FromBody] List<Character> character,
             [FromServices] IPlayerService playerService)
         {
             var player = await playerService.IncreaseOccurrencesAsync(userStartggId, userGamerTag, character);

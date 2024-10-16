@@ -20,11 +20,19 @@ namespace TOT.WebApi.Controllers
             return new ActionResult<List<Station>?>(stations);
         }
 
-        [HttpPut("SetStation/{tournamentId}:{setId}:{stationId}")]
-        public async Task<ActionResult<List<Station>?>> UpdateCharacterAsync(int tournamentId, string setId, int stationId,
+        [HttpPut("SetStation/{tournamentId}")]
+        public async Task<ActionResult<List<Station>?>> UpdateCharacterAsync(int tournamentId, [FromBody] Station? station,
             [FromServices] IStationService stationService, CancellationToken token)
         {
-            var stations = await stationService.SetStationForASetAsync(tournamentId, setId, stationId, token);
+            var stations = await stationService.SetStationForASetAsync(tournamentId, station, token);
+            return new ActionResult<List<Station>?>(stations);
+        }
+
+        [HttpPut("RemoveStation/{tournamentId}/{setId}")]
+        public async Task<ActionResult<List<Station>?>> UpdateCharacterAsync(int tournamentId, string setId,
+            [FromServices] IStationService stationService, CancellationToken token)
+        {
+            var stations = await stationService.RemoveStationForASetAsync(tournamentId, setId, token);
             return new ActionResult<List<Station>?>(stations);
         }
     }

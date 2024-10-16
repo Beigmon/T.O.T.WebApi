@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TOT.DTO;
 using TOT.Services.Caching;
 using TOT.Services.Caching.Interfaces;
@@ -18,6 +18,8 @@ JsonSerializerOptions options = new()
     ReferenceHandler = ReferenceHandler.IgnoreCycles,
     WriteIndented = true
 };
+
+Console.WriteLine("Yoyo1");
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -52,7 +54,7 @@ builder.Services.AddAuthentication(x =>
     {
         x.RequireHttpsMetadata = true;
         x.SaveToken = true;
-        var key = Encoding.UTF8.GetBytes("SECRET SECRET SECRET SECRET SECRET SECRET");
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["SECRET_API_KEY"]);
         x.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
