@@ -1,0 +1,4 @@
+services:
+  tot:
+    build: .
+    image: xiathyr/tot:latest
