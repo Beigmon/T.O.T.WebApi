@@ -1,0 +1,12 @@
+# Build the image
+docker build -t tot-webapi .
+# Login to docker
+docker login --username xiathyr 
+# Set a tag of the built image
+docker tag tot-webapi xiathyr/tot-webapi:latest
+# Push the image to the repo
+docker push xiathyr/tot-webapi
+# Pull from the VPS
+
+# Copier un fichier 
+scp SrcFile username@IPAddress:destinationFromHome
